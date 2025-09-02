@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Hub - Login</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    function validateEmail() {
+      const email = document.getElementById("email").value;
+      const button = document.getElementById("submitBtn");
+      const regex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+      button.disabled = !regex.test(email);
+    }
+
+    function login() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      localStorage.setItem("login_name", name);
+      localStorage.setItem("login_email", email);
+      window.location.href = "landing.html";
+    }
+  </script>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Student Hub</h1>
+    <h3>Presented by DevForge</h3>
+    <input id="name" type="text" placeholder="Name"><br>
+    <input id="email" type="email" placeholder="Email" oninput="validateEmail()"><br>
+    <button id="submitBtn" onclick="login()" disabled>Submit</button>
+  </div>
+</body>
+</html>
