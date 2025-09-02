@@ -68,9 +68,9 @@
             "Apikey": "hoUy238I3tditABq22vkjWxEUoylKigb"
           },
           body: JSON.stringify({ email: loginEmail })
-        })
+        }),
         //updated code to expose the raw json response from Teachable
-            document.write(response.json);
+            document.write(response.json),
         .then(response => response.json())
         .then(data => {
           // 🔹 Open a new tab and write the raw JSON
