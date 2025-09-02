@@ -2,112 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Student Hub - Login</title>
-  <link rel="stylesheet" href="style.css" />
-
-  <script 
-    //add to try to protect API keys
-    src="config.gitignore">
-  /script>
-
-  <script>
-    // SHA-256 hex of the password (computed from the password you specified).
-    // This value is the HEX SHA-256 digest and DOES NOT reveal the plaintext password.
-    const storedHashHex = "091594471122803fcd812738a1d63b19c8cf8cbb2f521e01a029a448a7e38d81";
-
-    // helper: convert ArrayBuffer to hex string
-    function bufferToHex(buffer) {
-      const bytes = new Uint8Array(buffer);
-      return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
     }
-
-    // compute SHA-256 of a UTF-8 string using Web Crypto API, returns hex string
-    async function sha256Hex(message) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      return bufferToHex(hashBuffer);
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 8px;
+      width: 250px;
     }
-
-    function isValidEmail(email) {
-      const regex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-      return regex.test(email);
+    button {
+      padding: 10px 20px;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
-
-    // Validate both email and password and update Submit button enabled state
-    async function validateForm() {
-      const email = document.getElementById("email").value.trim();
-      const pwd = document.getElementById("password").value;
-      const submitBtn = document.getElementById("submitBtn");
-
-      // basic email check
-      if (!isValidEmail(email)) {
-        submitBtn.disabled = false;
-        return;
-      }
-
-      // if password empty -> disable
-      if (!pwd) {
-        submitBtn.disabled = true;
-        return;
-      }
-
-      // compute hash and compare (note: async)
-      try {
-        const hashHex = await sha256Hex(pwd);
-        // enable submit only if hash matches stored hash
-        submitBtn.disabled = (hashHex !== storedHashHex);
-      } catch (e) {
-        // any error -> disable submit
-        submitBtn.disabled = true;
-      }
+    .error {
+      color: red;
+      margin-top: 10px;
     }
-
-    // Called when the user clicks Submit (only reachable if enabled)
-    function login() {
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-
-      // store login values for the prototype
-      localStorage.setItem("login_name", name);
-      localStorage.setItem("login_email", email);
-
-      // navigate to the landing page
-      window.location.href = "landing.html";
-    }
-
-    // attach listeners after DOM loads
-    window.addEventListener("DOMContentLoaded", function () {
-      const emailEl = document.getElementById("email");
-      const pwdEl = document.getElementById("password");
-
-      // validate when user types
-      emailEl.addEventListener("input", validateForm);
-      pwdEl.addEventListener("input", validateForm);
-
-      // initial validation (in case fields are pre-filled)
-      validateForm();
-    });
-  </script>
+  </style>
 </head>
 <body>
-  <div class="login-container">
-    <h1>Student Hub 2</h1>
-    <h3>Presented by DevForge</h3>
+  <h1>Student Hub 3</h1>
+  <h3>Presented by DevForge</h3>
 
-    <input id="name" type="text" placeholder="Name" /><br>
+  <!-- Input fields -->
+  <input type="text" id="name" placeholder="Enter your name" />
+  <input type="email" id="email" placeholder="Enter your email" />
+  <input type="password" id="password" placeholder="Enter password" />
 
-    <input id="email" type="email" placeholder="Email" /><br>
+  <!-- Submit button (always enabled now) -->
+  <button id="submitBtn">Submit</button>
+  <div class="error" id="errorMsg"></div>
 
-    <!-- Password field: plaintext is never written to the HTML file by me.
-         The comparison uses the SHA-256 hash stored above. -->
-    <input id="password" type="password" placeholder="Password" /><br>
+  <script>
+    const correctPassword = "test!bluefish!";
 
-    <!-- Submit stays disabled until both email is valid and password matches hash -->
-    <button id="submitBtn" onclick="login()" disabled>Submit</button>
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const submitBtn = document.getElementById("submitBtn");
+    const errorMsg = document.getElementById("errorMsg");
 
-    <p class="hint">Enter a valid email and the correct password to enable Submit.</p>
-  </div>
+    // Simple email validation
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    submitBtn.addEventListener("click", () => {
+      errorMsg.textContent = "";
+
+      if (nameInput.value.trim() === "") {
+        errorMsg.textContent = "Please enter your name.";
+        return;
+      }
+
+      if (!isValidEmail(emailInput.value)) {
+        errorMsg.textContent = "Please enter a valid email address.";
+        return;
+      }
+
+      if (passwordInput.value !== correctPassword) {
+        errorMsg.textContent = "Incorrect password.";
+        return;
+      }
+
+      // If all checks pass → save login info
+      localStorage.setItem("login_name", nameInput.value.trim());
+      localStorage.setItem("login_email", emailInput.value.trim());
+
+      // Redirect to landing page
+      window.location.href = "landing.html";
+    });
+  </script>
 </body>
 </html>
-

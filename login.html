@@ -16,10 +16,6 @@
       padding: 8px;
       width: 250px;
     }
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
     button {
       padding: 10px 20px;
       background-color: #007acc;
@@ -43,52 +39,42 @@
   <input type="email" id="email" placeholder="Enter your email" />
   <input type="password" id="password" placeholder="Enter password" />
 
-  <!-- Submit button (disabled by default) -->
-  <button id="submitBtn" disabled>Submit</button>
+  <!-- Submit button (always enabled) -->
+  <button id="submitBtn">Submit</button>
   <div class="error" id="errorMsg"></div>
 
+  <!-- Load config file -->
+  <script src="config.js"></script>
   <script>
-    // Expected password (hashed in real apps, but here it's simple)
-    const correctPassword = "test!bluefish!";
-
     const nameInput = document.getElementById("name");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
     const submitBtn = document.getElementById("submitBtn");
     const errorMsg = document.getElementById("errorMsg");
 
-    // Simple email validation
     function isValidEmail(email) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    // Enable/disable button depending on inputs
-    function validateForm() {
-      if (
-        nameInput.value.trim() !== "" &&
-        isValidEmail(emailInput.value) &&
-        passwordInput.value === correctPassword
-      ) {
-        submitBtn.disabled = false;
-        errorMsg.textContent = "";
-      } else {
-        submitBtn.disabled = true;
-      }
-    }
-
-    // Attach validation to input events
-    nameInput.addEventListener("input", validateForm);
-    emailInput.addEventListener("input", validateForm);
-    passwordInput.addEventListener("input", validateForm);
-
-    // Submit button click
     submitBtn.addEventListener("click", () => {
-      if (passwordInput.value !== correctPassword) {
+      errorMsg.textContent = "";
+
+      if (nameInput.value.trim() === "") {
+        errorMsg.textContent = "Please enter your name.";
+        return;
+      }
+
+      if (!isValidEmail(emailInput.value)) {
+        errorMsg.textContent = "Please enter a valid email address.";
+        return;
+      }
+
+      if (passwordInput.value !== getDecryptedPassword()) {
         errorMsg.textContent = "Incorrect password.";
         return;
       }
 
-      // Store login data in localStorage for later use
+      // Save login info in localStorage
       localStorage.setItem("login_name", nameInput.value.trim());
       localStorage.setItem("login_email", emailInput.value.trim());
 
@@ -98,5 +84,3 @@
   </script>
 </body>
 </html>
-
-

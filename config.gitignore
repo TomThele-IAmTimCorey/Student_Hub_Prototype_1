@@ -6,3 +6,12 @@ window.appConfig = {
   // Teachable API key (replace with your real one)
   teachableApiKey: "hoUy238I3tditABq22vkjWxEUoylKigb"
 };
+// AI keeps loosing focus and dropping the pwd encryption, not sure which version it is using now
+// Store the password encrypted (base64 encoding here for simplicity).
+// "test!bluefish!" encoded in Base64 = dGVzdCFibHVlZmlzaCE=
+const ENCRYPTED_PASSWORD = "dGVzdCFibHVlZmlzaCE=";
+
+// Simple decryption (Base64 decode)
+function getDecryptedPassword() {
+  return atob(ENCRYPTED_PASSWORD);
+}
