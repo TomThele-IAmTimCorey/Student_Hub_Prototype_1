@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Student Hub Landing 2</title>
+  <title>Student Hub Landing 3</title>
   
   <script src="config.gitignore"></script>
   
@@ -69,7 +69,14 @@
           },
           body: JSON.stringify({ email: loginEmail })
         });
-
+        //updated code to expose the raw json response from Teachable
+        .then(response => response.json())
+        .then(data => {
+          // 🔹 Open a new tab and write the raw JSON
+          const newTab = window.open();
+          newTab.document.write("<pre>" + JSON.stringify(data, null, 2) + "</pre>");
+          newTab.document.close();
+        })
         const data = await response.json();
 
         // Open a new tab with the raw JSON response
