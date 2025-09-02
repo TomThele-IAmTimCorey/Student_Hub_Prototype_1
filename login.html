@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Hub Login 2</title>
+  <script src="config.gitignore"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 50px; }
+    input { display: block; margin: 10px 0; padding: 8px; width: 250px; }
+    button { padding: 8px 16px; }
+    button:disabled { background-color: #ccc; color: #666; cursor: not-allowed; }
+    .error { color: red; display: none; }
+  </style>
+</head>
+<body>
+  <h1>Student Hub</h1>
+  <h3>Presented by DevForge</h3>
+
+  <label>Name:</label>
+  <input type="text" id="nameInput" placeholder="Your name">
+
+  <label>Email:</label>
+  <input type="email" id="emailInput" placeholder="Your email">
+
+  <label>Password:</label>
+  <input type="password" id="passwordInput" placeholder="Password">
+
+  <button id="submitBtn" disabled>Submit</button>
+  <p class="error" id="errorMsg">Incorrect password. Please try again.</p>
+
+  <script>
+    const nameInput = document.getElementById('nameInput');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
+
+    function validateForm() {
+      submitBtn.disabled = !(emailInput.value.includes('@') && nameInput.value.trim() !== '');
+    }
+
+    nameInput.addEventListener('input', validateForm);
+    emailInput.addEventListener('input', validateForm);
+
+    async function checkPassword(inputPassword) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(inputPassword);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+      return hashHex === window.appConfig.loginPasswordHash;
+    }
+
+    submitBtn.addEventListener('click', async () => {
+      const passwordValid = await checkPassword(passwordInput.value);
+      if (!passwordValid) {
+        errorMsg.style.display = 'block';
+        return;
+      }
+      errorMsg.style.display = 'none';
+      // Store login info in localStorage for landing page
+      localStorage.setItem('login_name', nameInput.value.trim());
+      localStorage.setItem('login_email', emailInput.value.trim());
+      window.location.href = 'landing.html';
+    });
+  </script>
+</body>
+</html>
