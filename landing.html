@@ -54,7 +54,7 @@
       "Welcome In, " + (localStorage.getItem('login_name') || "Student");
 
     const loginEmail = localStorage.getItem('login_email');
-
+      document.write(loginEmail);
     async function loadCourses() {
       const container = document.getElementById('coursesContainer');
       const apiKey = window.appConfig.teachableApiKey;
@@ -70,7 +70,7 @@
           body: JSON.stringify({ email: loginEmail })
         })
         //updated code to expose the raw json response from Teachable
-    
+            document.write(response.json);
         .then(response => response.json())
         .then(data => {
           // 🔹 Open a new tab and write the raw JSON
