@@ -1,70 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Student Hub Login 2</title>
-  
-  <script src="config.gitignore"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Hub - Login</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 50px; }
-    input { display: block; margin: 10px 0; padding: 8px; width: 250px; }
-    button { padding: 8px 16px; }
-    button:disabled { background-color: #ccc; color: #666; cursor: not-allowed; }
-    .error { color: red; display: none; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 8px;
+      width: 250px;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>Student Hub</h1>
   <h3>Presented by DevForge</h3>
 
-  <label>Name:</label>
-  <input type="text" id="nameInput" placeholder="Your name">
+  <!-- Input fields -->
+  <input type="text" id="name" placeholder="Enter your name" />
+  <input type="email" id="email" placeholder="Enter your email" />
+  <input type="password" id="password" placeholder="Enter password" />
 
-  <label>Email:</label>
-  <input type="email" id="emailInput" placeholder="Your email">
-
-  <label>Password:</label>
-  <input type="password" id="passwordInput" placeholder="Password">
-
+  <!-- Submit button (disabled by default) -->
   <button id="submitBtn" disabled>Submit</button>
-  <p class="error" id="errorMsg">Incorrect password. Please try again.</p>
+  <div class="error" id="errorMsg"></div>
 
   <script>
-    const nameInput = document.getElementById('nameInput');
-    const emailInput = document.getElementById('emailInput');
-    const passwordInput = document.getElementById('passwordInput');
-    const submitBtn = document.getElementById('submitBtn');
-    const errorMsg = document.getElementById('errorMsg');
+    // Expected password (hashed in real apps, but here it's simple)
+    const correctPassword = "test!bluefish!";
 
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const submitBtn = document.getElementById("submitBtn");
+    const errorMsg = document.getElementById("errorMsg");
+
+    // Simple email validation
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // Enable/disable button depending on inputs
     function validateForm() {
-      submitBtn.disabled = !(emailInput.value.includes('@') && nameInput.value.trim() !== '');
+      if (
+        nameInput.value.trim() !== "" &&
+        isValidEmail(emailInput.value) &&
+        passwordInput.value === correctPassword
+      ) {
+        submitBtn.disabled = false;
+        errorMsg.textContent = "";
+      } else {
+        submitBtn.disabled = true;
+      }
     }
 
-    nameInput.addEventListener('input', validateForm);
-    emailInput.addEventListener('input', validateForm);
+    // Attach validation to input events
+    nameInput.addEventListener("input", validateForm);
+    emailInput.addEventListener("input", validateForm);
+    passwordInput.addEventListener("input", validateForm);
 
-    async function checkPassword(inputPassword) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(inputPassword);
-      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-      return hashHex === window.appConfig.loginPasswordHash;
-    }
-
-    submitBtn.addEventListener('click', async () => {
-      const passwordValid = await checkPassword(passwordInput.value);
-      if (!passwordValid) {
-        errorMsg.style.display = 'block';
+    // Submit button click
+    submitBtn.addEventListener("click", () => {
+      if (passwordInput.value !== correctPassword) {
+        errorMsg.textContent = "Incorrect password.";
         return;
       }
-      errorMsg.style.display = 'none';
-      // Store login info in localStorage for landing page
-      localStorage.setItem('login_name', nameInput.value.trim());
-      localStorage.setItem('login_email', emailInput.value.trim());
-      window.location.href = 'landing.html';
+
+      // Store login data in localStorage for later use
+      localStorage.setItem("login_name", nameInput.value.trim());
+      localStorage.setItem("login_email", emailInput.value.trim());
+
+      // Redirect to landing page
+      window.location.href = "landing.html";
     });
   </script>
 </body>
 </html>
+
 
