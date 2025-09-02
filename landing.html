@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Hub - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    window.onload = function() {
+      const name = localStorage.getItem("login_name") || "Student";
+      const email = localStorage.getItem("login_email") || "";
+      document.getElementById("welcome").innerText = "Welcome In, " + name;
+
+      // Demo table (replace later with API)
+      const demoCourses = [
+        { name: "Blazor Mastercourse", complete: 100, id: 1 },
+        { name: "C# Fundamentals", complete: 60, id: 2 },
+        { name: "ASP.NET Core Basics", complete: 0, id: 3 }
+      ];
+
+      const tbody = document.getElementById("courseTable");
+      demoCourses.sort((a,b) => b.complete - a.complete).forEach(c => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${c.name}</td>
+          <td>${c.complete}%</td>
+          <td><a href="https://courses.iamtimcorey.com/courses/enrolled/${c.id}">
+            <button>${c.complete === 100 ? "Review" : c.complete > 0 ? "In Progress" : "Not Started"}</button>
+          </a></td>
+        `;
+        tbody.appendChild(row);
+      });
+    };
+  </script>
+</head>
+<body>
+  <!-- Navigation bar -->
+  <nav class="navbar">
+    <a href="landing.html">Dashboard</a>
+    <a href="#">Courses</a>
+    <a href="#">Resources</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <h2 id="welcome">Welcome In</h2>
+
+  <!-- Section01: Badges -->
+  <section>
+    <h3>My Badges</h3>
+    <div class="badges">
+      <img src="https://irp.cdn-website.com/ebe5b67e/dms3rep/multi/Sample+Completion+Badge.png" />
+      <img src="https://images.credly.com/images/5ce74333-7dab-48c5-8e20-c8f489ec6e6c/image.png" />
+      <img src="https://studentengagement.ie/wp-content/uploads/2022/01/NStEP-Digital-Badges-Academic-Representation.png" />
+    </div>
+  </section>
+
+  <!-- Section02: Courses -->
+  <section>
+    <h3>My Courses</h3>
+    <table>
+      <thead>
+        <tr><th>Course</th><th>Progress</th><th>Status</th></tr>
+      </thead>
+      <tbody id="courseTable"></tbody>
+    </table>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 DevForge - Inspired by IAmTimCorey</p>
+  </footer>
+</body>
+</html>
