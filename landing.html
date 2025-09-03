@@ -72,12 +72,10 @@
           container.innerHTML = `No enrollments found for ${loginEmail}`;
           return;
         }
-        // Debug: Write API response to a new tab
-          const debugWindow = window.open("", "_blank");
-          debugWindow.document.write("<title>API Response</title>");  
-          debugWindow.document.write("<pre>" + JSON.stringify(data, null, 2) + "</pre>");
-          loadCourses();
-          
+        // Show raw response for debugging
+        container.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;  
+        
+        
         // Sort courses by percent_complete descending
         courses.sort((a, b) => b.percent_complete - a.percent_complete);
 
@@ -109,6 +107,6 @@
 
 
   </script>
-  <h3>response.json()</h3>
+  <h3>Table should be above this</h3>
 </body>
 </html>
