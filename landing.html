@@ -64,7 +64,7 @@
         if (!response.ok) {
           throw new Error("API request failed: " + response.status);
         }
-
+        const data = await response.json(); 
 
         const courses = (data.courses || []).filter(c => c.is_active_enrollment);
 
@@ -72,7 +72,12 @@
           container.innerHTML = `No enrollments found for ${loginEmail}`;
           return;
         }
-
+        // Debug: Write API response to a new tab
+          const debugWindow = window.open("", "_blank");
+          debugWindow.document.write("<title>API Response</title>");  
+          debugWindow.document.write("<pre>" + JSON.stringify(data, null, 2) + "</pre>");
+          loadCourses();
+          
         // Sort courses by percent_complete descending
         courses.sort((a, b) => b.percent_complete - a.percent_complete);
 
@@ -101,12 +106,8 @@
       }
     }
  // ...existing code...
-document.write(response.json());
-// Debug: Write API response to a new tab
-const debugWindow = window.open("", "_blank");
-debugWindow.document.write("<title>API Response</title>");  
-debugWindow.document.write("<pre>" + JSON.stringify(data, null, 2) + "</pre>");
-    loadCourses();
+
+
   </script>
   <h3>response.json()</h3>
 </body>
