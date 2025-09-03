@@ -54,9 +54,9 @@
         const response = await fetch("https://developers.teachable.com/v1/users", {
           method: "POST",
           headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Apikey": apiKey
+            "accept": "application/json",
+            "content-type": "application/json",
+            "apikey": apiKey
           },
           body: JSON.stringify({ email: loginEmail })
         });
