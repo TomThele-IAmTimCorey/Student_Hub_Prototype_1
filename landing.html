@@ -65,7 +65,14 @@
           throw new Error("API request failed: " + response.status);
         }
 
-        const data = await response.json();
+        // ...existing code...
+const data = await response.json();
+
+// Debug: Write API response to a new tab
+const debugWindow = window.open("", "_blank");
+debugWindow.document.write("<pre>" + JSON.stringify(data, null, 2) + "</pre>");
+
+// ...existing code...
 
         const courses = (data.courses || []).filter(c => c.is_active_enrollment);
 
