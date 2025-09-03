@@ -36,6 +36,9 @@
       </div>
     </div>
 
+      <!-- Debug output area -->
+  <div id="debugOutput" style="color: #c00; margin-bottom: 10px;"></div>
+
     <!-- Section 2: Courses -->
     <div id="coursesContainer"></div>
   </div>
@@ -45,13 +48,18 @@
       "Welcome In, " + (localStorage.getItem('login_name') || "Student");
 
     const loginEmail = localStorage.getItem('login_email');
-
+    function debugLog(msg) {
+  const debugDiv = document.getElementById('debugOutput');
+  debugDiv.innerHTML += `<div>${msg}</div>`;
+}
+    document.getElementById('debugOutput').innerHTML = "";
+    
     async function loadCourses() {
       const container = document.getElementById('coursesContainer');
       const apiKey = "hoUy238I3tditABq22vkjWxEUoylKigb"; // Use your actual key
 
       // Starting Try attempt for API call
-      container.innerHTML = `Starting API call for ${loginEmail}`;
+      debugLog(`Starting API call for ${loginEmail}`);
           
       try {
         const response = await fetch("https://developers.teachable.com/v1/users", {
@@ -70,7 +78,7 @@
         const data = await response.json(); 
 
         // Finished Try attempt for API call
-      container.innerHTML = `Finished API call for ${loginEmail}`;
+      debugLog(`Finished API call for ${loginEmail}`);
 
         const courses = (data.courses || []).filter(c => c.is_active_enrollment);
 
@@ -80,7 +88,7 @@
         }
 
         // Show raw response for debugging
-        container.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;  
+        debugLog(`<pre>${JSON.stringify(data, null, 2)}</pre>`);  
         
         // Sort courses by percent_complete descending
         courses.sort((a, b) => b.percent_complete - a.percent_complete);
