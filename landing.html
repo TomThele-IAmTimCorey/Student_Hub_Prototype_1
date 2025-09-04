@@ -93,6 +93,7 @@
         debugLog(`<pre>${JSON.stringify(data, null, 2)}</pre>`); 
         console.log("API response data:", data);  
         
+        
         // Sort courses by percent_complete descending
         courses.sort((a, b) => b.percent_complete - a.percent_complete);
 
